@@ -19,6 +19,7 @@
       const isOpen = nav.classList.toggle('open');
       hamburger.classList.toggle('active', isOpen);
       hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      hamburger.setAttribute('aria-label', isOpen ? 'Đóng menu điều hướng' : 'Mở menu điều hướng');
     });
     // Close nav on link click
     nav.querySelectorAll('a').forEach(a => {
@@ -26,6 +27,7 @@
         nav.classList.remove('open');
         hamburger.classList.remove('active');
         hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Mở menu điều hướng');
       });
     });
   }

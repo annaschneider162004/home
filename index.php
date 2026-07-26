@@ -153,7 +153,7 @@ $ogImage   = $seo['og_image'] ?? '';
 <header id="header">
   <div class="container">
     <div class="header-inner">
-      <a href="/" class="logo" aria-label="<?= e($siteName) ?>">
+      <a href="/" class="logo">
         <span class="logo-icon" aria-hidden="true">♪</span>
         <span class="logo-text">
           <strong>MusicOfEveryone</strong>
@@ -179,7 +179,7 @@ $ogImage   = $seo['og_image'] ?? '';
         <a href="#courses" class="btn btn-primary">Đăng ký</a>
       </div>
 
-      <button class="hamburger" aria-label="Mở hoặc đóng menu điều hướng" aria-controls="primary-nav" aria-expanded="false" type="button">
+      <button class="hamburger" aria-label="Mở menu điều hướng" aria-controls="primary-nav" aria-expanded="false" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -195,7 +195,7 @@ $ogImage   = $seo['og_image'] ?? '';
           <span>CHO MỌI LỨA TUỔI</span>
         </h1>
         <p>Từ cơ bản đến nâng cao – Lộ trình rõ ràng – Học mọi lúc, mọi nơi</p>
-        <a href="<?= e($ctaUrl) ?>" class="btn btn-primary hero-cta">Bắt đầu hành trình <span aria-hidden="true">→</span><span class="sr-only"> mở danh sách khóa học nổi bật</span></a>
+        <a href="<?= e($ctaUrl) ?>" class="btn btn-primary hero-cta">Bắt đầu hành trình <span aria-hidden="true">→</span><span class="sr-only">Mở danh sách khóa học nổi bật</span></a>
       </div>
 
       <div class="hero-showcase">
@@ -275,7 +275,7 @@ $ogImage   = $seo['og_image'] ?? '';
 
     <div class="featured-courses-grid">
       <?php foreach ($featuredCourseCards as $course): ?>
-        <article class="featured-course-card <?= e($course['class']) ?>" role="img" aria-label="<?= e($course['aria']) ?>">
+        <article class="featured-course-card <?= e($course['class']) ?>" aria-label="<?= e($course['aria']) ?>">
           <div class="featured-course-overlay"></div>
           <span class="featured-course-badge"><?= e($course['badge']) ?></span>
           <div class="featured-course-content">
@@ -293,7 +293,7 @@ $ogImage   = $seo['og_image'] ?? '';
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand" id="about">
-        <a href="/" class="logo" aria-label="<?= e($siteName) ?>">
+        <a href="/" class="logo">
           <span class="logo-icon" aria-hidden="true">♪</span>
           <span class="logo-text">
             <strong>MusicOfEveryone</strong>

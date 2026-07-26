@@ -1,0 +1,115 @@
+{
+  "admin": {
+    "username": "admin",
+    "passwordSalt": "1ba9ef2c5d201c8bb884b5c6db9def28",
+    "passwordHash": "fc08acf7ef48f9651252c75c276680d25bf18010e55083d6909969da2588ffb9e7a14ad0ea29d3865f6bcef3ddb83f5a8f99026b434a432f3e3f0b4bafd73230"
+  },
+  "settings": {
+    "siteName": "MusicOfEveryone - Music Club",
+    "baseUrl": "http://localhost:3000",
+    "map": {
+      "address": "Hà Nội, Việt Nam",
+      "latitude": "21.0285",
+      "longitude": "105.8542",
+      "embedIframe": ""
+    },
+    "seo": {
+      "home": {
+        "title": "MusicOfEveryone - Học nhạc trực tuyến",
+        "description": "Nền tảng học nhạc trực tuyến cho mọi lứa tuổi với lộ trình cá nhân hóa.",
+        "keywords": "học nhạc online, piano, violin, thanh nhạc, recorder",
+        "ogImage": "/images/hero-laptop.svg"
+      },
+      "courses": {
+        "title": "Khóa học âm nhạc | MusicOfEveryone",
+        "description": "Khám phá các khóa học thanh nhạc, piano, violin, sáo recorder.",
+        "keywords": "khóa học âm nhạc, khóa học piano, khóa học violin",
+        "ogImage": "/images/course-piano.svg"
+      },
+      "about": {
+        "title": "Về chúng tôi | MusicOfEveryone",
+        "description": "MusicOfEveryone là câu lạc bộ học nhạc online dành cho học viên 6-18 tuổi.",
+        "keywords": "music club, học nhạc trẻ em",
+        "ogImage": "/images/hero-guitar.svg"
+      }
+    }
+  },
+  "courses": [
+    {
+      "id": "c1",
+      "name": "Thanh nhạc",
+      "description": "Luyện hơi, phát âm và biểu cảm bài hát theo lứa tuổi.",
+      "level": "Cơ bản đến nâng cao",
+      "price": "799000",
+      "image": "/images/course-vocal.svg"
+    },
+    {
+      "id": "c2",
+      "name": "Piano",
+      "description": "Nắm vững nền tảng nhạc lý và kỹ thuật tay phải/tay trái.",
+      "level": "Cơ bản",
+      "price": "999000",
+      "image": "/images/course-piano.svg"
+    },
+    {
+      "id": "c3",
+      "name": "Violin",
+      "description": "Rèn tư thế, kéo vĩ chuẩn và cảm thụ giai điệu.",
+      "level": "Cơ bản",
+      "price": "899000",
+      "image": "/images/course-violin.svg"
+    },
+    {
+      "id": "c4",
+      "name": "Sáo Recorder",
+      "description": "Luyện thổi sáo đúng nhịp, đúng cao độ và tự tin biểu diễn.",
+      "level": "Cơ bản",
+      "price": "699000",
+      "image": "/images/course-recorder.svg"
+    }
+  ],
+  "teachers": [
+    {
+      "id": "t1",
+      "name": "Nguyễn Mai Anh",
+      "specialty": "Thanh nhạc",
+      "bio": "8 năm kinh nghiệm giảng dạy thanh nhạc thiếu nhi.",
+      "image": "/images/hero-singer.svg"
+    },
+    {
+      "id": "t2",
+      "name": "Trần Hoàng Nam",
+      "specialty": "Piano",
+      "bio": "Tốt nghiệp Nhạc viện, chuyên sâu piano cổ điển.",
+      "image": "/images/course-piano.svg"
+    }
+  ],
+  "users": [
+    {
+      "id": "u1",
+      "name": "Lê Khánh",
+      "email": "khanh@example.com",
+      "role": "student"
+    },
+    {
+      "id": "u2",
+      "name": "Phạm Linh",
+      "email": "linh@example.com",
+      "role": "editor"
+    }
+  ],
+  "posts": [
+    {
+      "id": "p1",
+      "title": "5 mẹo luyện ngón piano mỗi ngày",
+      "summary": "Bài tập ngắn 15 phút giúp tăng độ linh hoạt ngón tay.",
+      "category": "Thư viện"
+    },
+    {
+      "id": "p2",
+      "title": "Cách giữ nhịp khi tập violin",
+      "summary": "Kết hợp metronome để cải thiện cảm giác nhịp.",
+      "category": "Bài viết"
+    }
+  ]
+}

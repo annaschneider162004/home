@@ -65,13 +65,40 @@ $features = [
     ],
 ];
 
+$infoPanels = [
+    [
+        'id' => 'instruments',
+        'label' => 'Nhạc cụ',
+        'title' => 'Piano, guitar, violin và recorder',
+        'desc' => 'Danh mục nhạc cụ được giới thiệu đồng bộ để học viên dễ chọn đúng lộ trình theo sở thích.',
+    ],
+    [
+        'id' => 'teachers',
+        'label' => 'Giảng viên',
+        'title' => 'Đồng hành bởi đội ngũ hướng dẫn chất lượng',
+        'desc' => 'Mỗi lớp học đều được kèm cặp bởi giảng viên theo sát kỹ năng, cảm thụ và biểu diễn.',
+    ],
+    [
+        'id' => 'library',
+        'label' => 'Thư viện',
+        'title' => 'Tài nguyên học tập rõ ràng, dễ theo dõi',
+        'desc' => 'Bài tập, bản nhạc và ghi chú luyện tập được sắp xếp theo từng chủ đề học nhạc.',
+    ],
+    [
+        'id' => 'community',
+        'label' => 'Cộng đồng',
+        'title' => 'Không gian chia sẻ và biểu diễn thân thiện',
+        'desc' => 'Học viên có thể kết nối, giao lưu và tự tin thể hiện qua các hoạt động âm nhạc chung.',
+    ],
+];
+
 $featuredCourseCards = [
     [
         'class' => 'theme-vocals',
         'title' => 'Thanh nhạc',
         'desc' => 'Luyện hơi thở, cảm âm và bản lĩnh sân khấu qua các ca khúc phù hợp lứa tuổi.',
         'badge' => 'Cơ bản đến nâng cao',
-        'aria' => 'Minh họa bé gái hát với micro trên sân khấu tím',
+        'aria' => 'Minh họa bé gái mặc váy tím hát với micro trên sân khấu',
         'caption' => 'Bé gái hát với micro • váy tím',
     ],
     [
@@ -134,7 +161,7 @@ $ogImage   = $seo['og_image'] ?? '';
         </span>
       </a>
 
-      <nav aria-label="Điều hướng chính">
+      <nav id="primary-nav" aria-label="Điều hướng chính">
         <ul>
           <li><a href="#hero" class="active">Trang chủ</a></li>
           <li><a href="#courses">Khóa học</a></li>
@@ -152,7 +179,7 @@ $ogImage   = $seo['og_image'] ?? '';
         <a href="#courses" class="btn btn-primary">Đăng ký</a>
       </div>
 
-      <button class="hamburger" aria-label="Menu" type="button">
+      <button class="hamburger" aria-label="Menu" aria-controls="primary-nav" aria-expanded="false" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -213,7 +240,6 @@ $ogImage   = $seo['og_image'] ?? '';
 
 <section id="features">
   <div class="container">
-    <span id="community" class="anchor-target" aria-hidden="true"></span>
     <div class="features-grid">
       <?php foreach ($features as $feature): ?>
         <article class="feature-card">
@@ -226,10 +252,22 @@ $ogImage   = $seo['og_image'] ?? '';
   </div>
 </section>
 
+<section class="info-panels-section">
+  <div class="container">
+    <div class="info-panels-grid">
+      <?php foreach ($infoPanels as $panel): ?>
+        <article id="<?= e($panel['id']) ?>" class="info-panel-card">
+          <span class="info-panel-label"><?= e($panel['label']) ?></span>
+          <h2><?= e($panel['title']) ?></h2>
+          <p><?= e($panel['desc']) ?></p>
+        </article>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
 <section id="courses">
   <div class="container">
-    <span id="instruments" class="anchor-target" aria-hidden="true"></span>
-    <span id="library" class="anchor-target" aria-hidden="true"></span>
     <div class="section-head">
       <h2 class="section-title-inline">🎵 KHÓA HỌC NỔI BẬT</h2>
       <a href="#footer" class="section-link">Xem tất cả khóa học <span aria-hidden="true">→</span></a>
@@ -280,7 +318,7 @@ $ogImage   = $seo['og_image'] ?? '';
         </ul>
       </div>
 
-      <div class="footer-col" id="teachers">
+      <div class="footer-col">
         <h4>Lộ trình</h4>
         <ul>
           <li><a href="#levels">Cấp 1</a></li>

@@ -50,7 +50,6 @@ button { font: inherit; }
 }
 
 section { padding: 88px 0; }
-.anchor-target { display: block; position: relative; top: -108px; visibility: hidden; }
 
 .btn {
   display: inline-flex;
@@ -444,6 +443,48 @@ nav a.active::after { width: 100%; }
   padding-top: 28px;
 }
 
+.info-panels-section {
+  padding-top: 10px;
+  padding-bottom: 26px;
+}
+
+.info-panels-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.info-panel-card {
+  padding: 22px 20px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 10px 28px rgba(32, 50, 41, 0.05);
+  scroll-margin-top: 112px;
+}
+
+.info-panel-label {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green-dark);
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.info-panel-card h2 {
+  margin-top: 14px;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.info-panel-card p {
+  margin-top: 10px;
+  color: var(--text-mid);
+  font-size: .92rem;
+}
+
 .features-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -772,6 +813,11 @@ nav a.active::after { width: 100%; }
   50% { transform: translateY(-10px); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .floating-note { animation: none; }
+}
+
 @media (max-width: 1180px) {
   .header-inner { flex-wrap: wrap; padding: 18px 0; }
   nav { order: 3; width: 100%; }
@@ -783,6 +829,7 @@ nav a.active::after { width: 100%; }
   .hero-showcase { max-width: 620px; width: 100%; margin: 0 auto; }
   .levels-list { grid-template-columns: 1fr; }
   .features-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .info-panels-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .featured-courses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -811,10 +858,6 @@ nav a.active::after { width: 100%; }
     border-radius: 20px;
     background: var(--white);
     box-shadow: var(--shadow);
-  }
-
-  nav.open .header-actions {
-    display: flex;
   }
 
   #hero { padding: 24px 0 110px; }
@@ -869,6 +912,7 @@ nav a.active::after { width: 100%; }
   #levels { margin-top: -34px; }
   .level-pill { align-items: flex-start; }
   .features-grid,
+  .info-panels-grid,
   .featured-courses-grid,
   .footer-top { grid-template-columns: 1fr; }
   .section-head,

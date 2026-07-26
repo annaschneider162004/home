@@ -16,13 +16,17 @@
   const nav = document.querySelector('#header nav');
   if (hamburger && nav) {
     hamburger.addEventListener('click', () => {
-      nav.classList.toggle('open');
-      const spans = hamburger.querySelectorAll('span');
-      hamburger.classList.toggle('active');
+      const isOpen = nav.classList.toggle('open');
+      hamburger.classList.toggle('active', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
     // Close nav on link click
     nav.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => nav.classList.remove('open'));
+      a.addEventListener('click', () => {
+        nav.classList.remove('open');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
     });
   }
 

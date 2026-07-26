@@ -122,7 +122,7 @@ $featuredCourseCards = [
         'title' => 'Sáo Recorder',
         'desc' => 'Học thổi sáo nhẹ nhàng, đọc nốt và phối hợp nhịp điệu trong môi trường vui nhộn.',
         'badge' => 'Cơ bản',
-        'aria' => 'Minh họa bé trai thổi sáo recorder với áo xanh lá',
+        'aria' => 'Minh họa bé trai thổi sáo Recorder với áo xanh lá',
         'caption' => 'Bé trai thổi sáo recorder • áo xanh lá',
     ],
 ];
@@ -179,7 +179,7 @@ $ogImage   = $seo['og_image'] ?? '';
         <a href="#courses" class="btn btn-primary">Đăng ký</a>
       </div>
 
-      <button class="hamburger" aria-label="Menu" aria-controls="primary-nav" aria-expanded="false" type="button">
+      <button class="hamburger" aria-label="Mở hoặc đóng menu điều hướng" aria-controls="primary-nav" aria-expanded="false" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -195,10 +195,10 @@ $ogImage   = $seo['og_image'] ?? '';
           <span>CHO MỌI LỨA TUỔI</span>
         </h1>
         <p>Từ cơ bản đến nâng cao – Lộ trình rõ ràng – Học mọi lúc, mọi nơi</p>
-        <a href="<?= e($ctaUrl) ?>" class="btn btn-primary hero-cta">Bắt đầu hành trình <span aria-hidden="true">→</span></a>
+        <a href="<?= e($ctaUrl) ?>" class="btn btn-primary hero-cta">Bắt đầu hành trình <span aria-hidden="true">→</span><span class="sr-only"> mở danh sách khóa học nổi bật</span></a>
       </div>
 
-      <div class="hero-showcase" aria-label="Bộ minh họa hero gồm 3 nhân vật và nốt nhạc trang trí">
+      <div class="hero-showcase">
         <span class="hero-orb hero-orb-green" aria-hidden="true"></span>
         <span class="hero-orb hero-orb-purple" aria-hidden="true"></span>
         <span class="floating-note note-one" aria-hidden="true">♪</span>

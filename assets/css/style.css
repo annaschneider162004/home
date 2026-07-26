@@ -817,7 +817,13 @@ nav a.active::after { width: 100%; }
   .floating-note { animation: none; }
 }
 
-@media (max-width: 1180px) {
+@media (min-width: 900.01px) and (max-width: 1180px) {
+  .header-inner { flex-wrap: wrap; padding: 18px 0; }
+  .logo { order: 1; }
+  .header-actions { order: 2; }
+  nav { order: 3; width: 100%; }
+  nav ul { justify-content: center; gap: 18px; }
+  .hamburger { order: 4; }
   .hero-inner { grid-template-columns: 1fr; }
   .hero-copy { text-align: center; }
   .hero-copy p { margin-left: auto; margin-right: auto; }
@@ -830,16 +836,16 @@ nav a.active::after { width: 100%; }
   .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (max-width: 1180px) and (min-width: 901px) {
-  .header-inner { flex-wrap: wrap; padding: 18px 0; }
-  .logo { order: 1; }
-  .header-actions { order: 2; }
-  nav { order: 3; width: 100%; }
-  nav ul { justify-content: center; gap: 18px; }
-  .hamburger { order: 4; }
-}
-
 @media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-copy { text-align: center; }
+  .hero-copy p { margin-left: auto; margin-right: auto; }
+  .hero-cta { margin-left: auto; margin-right: auto; }
+  .hero-showcase { max-width: 620px; width: 100%; margin: 0 auto; }
+  .levels-list { grid-template-columns: 1fr; }
+  .featured-courses-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .info-panels-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .header-inner {
     min-height: 84px;
   }

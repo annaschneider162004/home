@@ -6,35 +6,101 @@
 require_once __DIR__ . '/includes/functions.php';
 
 $seo = getSeo('home');
-$siteName    = getSetting('site_name', 'MusicOfEveryone');
-$heroTitle   = getSetting('hero_title', 'Âm Nhạc Dành Cho Tất Cả');
-$heroSub     = getSetting('hero_subtitle', 'Khám phá niềm đam mê âm nhạc của bạn với đội ngũ giảng viên chuyên nghiệp.');
-$heroBtnText = getSetting('hero_btn_text', 'Đăng Ký Ngay');
-$heroBtnUrl  = getSetting('hero_btn_url', '#courses');
-$mapEmbed    = getSetting('google_map_embed', '');
-$address     = getSetting('site_address', '');
-$phone       = getSetting('site_phone', '');
-$email       = getSetting('site_email', '');
-$facebook    = getSetting('facebook_url', '');
-$youtube     = getSetting('youtube_url', '');
-$footerText  = getSetting('footer_text', '© 2024 MusicOfEveryone');
+$siteName   = getSetting('site_name', 'MusicOfEveryone');
+$mapEmbed   = getSetting('google_map_embed', '');
+$address    = getSetting('site_address', '');
+$phone      = getSetting('site_phone', '');
+$email      = getSetting('site_email', '');
+$facebook   = getSetting('facebook_url', '');
+$youtube    = getSetting('youtube_url', '');
+$footerText = getSetting('footer_text', '© 2024 MusicOfEveryone');
+$ctaUrl     = getSetting('hero_btn_url', '#courses');
 
-// Featured courses
-$featuredCourses = Database::fetchAll("
-    SELECT c.*, t.name AS teacher_name
-    FROM courses c
-    LEFT JOIN teachers t ON c.teacher_id = t.id
-    WHERE c.featured = 1 AND c.status = 'active'
-    ORDER BY c.id DESC
-    LIMIT 6
-");
+$levelBadges = [
+    [
+        'accent' => 'green',
+        'level' => 'Cấp 1',
+        'title' => 'Khám phá & Làm quen',
+        'age' => '(6-10 tuổi)',
+    ],
+    [
+        'accent' => 'blue',
+        'level' => 'Cấp 2',
+        'title' => 'Nâng cao kỹ năng',
+        'age' => '(11-14 tuổi)',
+    ],
+    [
+        'accent' => 'purple',
+        'level' => 'Cấp 3',
+        'title' => 'Chuyên sâu & Định hướng',
+        'age' => '(15-18 tuổi)',
+    ],
+];
 
-// Stats
-$totalStudents = (int)Database::fetchScalar("SELECT COUNT(*) FROM students WHERE status != 'inactive'");
-$totalCourses  = (int)Database::fetchScalar("SELECT COUNT(*) FROM courses WHERE status = 'active'");
-$totalTeachers = (int)Database::fetchScalar("SELECT COUNT(*) FROM teachers WHERE status = 'active'");
+$features = [
+    [
+        'icon' => '▶',
+        'title' => 'Lộ trình cá nhân hóa',
+        'desc' => 'Thiết kế mục tiêu học tập theo độ tuổi, năng lực và nhạc cụ yêu thích của từng học viên.',
+    ],
+    [
+        'icon' => '🖥',
+        'title' => 'Học online linh hoạt',
+        'desc' => 'Chủ động học mọi lúc, mọi nơi với bài giảng trực tuyến rõ ràng và dễ theo dõi.',
+    ],
+    [
+        'icon' => '👥',
+        'title' => 'Giáo viên chất lượng',
+        'desc' => 'Đội ngũ giảng viên đồng hành sát sao, truyền cảm hứng và theo sát tiến độ mỗi buổi học.',
+    ],
+    [
+        'icon' => '🏅',
+        'title' => 'Nội dung đa dạng',
+        'desc' => 'Kết hợp nhạc lý, thực hành, biểu diễn và cảm thụ âm nhạc trong cùng một lộ trình.',
+    ],
+    [
+        'icon' => '↗',
+        'title' => 'Theo dõi tiến độ',
+        'desc' => 'Cập nhật chặng đường học tập minh bạch để phụ huynh và học viên dễ dàng nắm bắt.',
+    ],
+];
 
-$pageTitle = $seo['title'] ?? "$siteName - Âm Nhạc Dành Cho Tất Cả";
+$featuredCourseCards = [
+    [
+        'class' => 'theme-vocals',
+        'title' => 'Thanh nhạc',
+        'desc' => 'Luyện hơi thở, cảm âm và bản lĩnh sân khấu qua các ca khúc phù hợp lứa tuổi.',
+        'badge' => 'Cơ bản đến nâng cao',
+        'aria' => 'Minh họa bé gái hát với micro trên sân khấu tím',
+        'caption' => 'Bé gái hát với micro • váy tím',
+    ],
+    [
+        'class' => 'theme-piano',
+        'title' => 'Piano',
+        'desc' => 'Khởi đầu vững chắc với tư thế đúng, kỹ thuật tay cơ bản và cảm thụ giai điệu.',
+        'badge' => 'Cơ bản đến nâng cao',
+        'aria' => 'Minh họa bé trai chơi grand piano với vest đen trắng',
+        'caption' => 'Bé trai chơi grand piano • vest đen trắng',
+    ],
+    [
+        'class' => 'theme-violin',
+        'title' => 'Violin',
+        'desc' => 'Rèn luyện âm sắc, tư thế kéo vĩ và khả năng biểu cảm qua từng bài học.',
+        'badge' => 'Cơ bản',
+        'aria' => 'Minh họa bé gái chơi violin ngoài trời với váy nâu',
+        'caption' => 'Bé gái chơi violin • váy nâu',
+    ],
+    [
+        'class' => 'theme-recorder',
+        'title' => 'Sáo Recorder',
+        'desc' => 'Học thổi sáo nhẹ nhàng, đọc nốt và phối hợp nhịp điệu trong môi trường vui nhộn.',
+        'badge' => 'Cơ bản',
+        'aria' => 'Minh họa bé trai thổi sáo recorder với áo xanh lá',
+        'caption' => 'Bé trai thổi sáo recorder • áo xanh lá',
+    ],
+];
+
+$pageTitle = $seo['title'] ?? "$siteName - Học nhạc cho mọi lứa tuổi";
 $metaDesc  = $seo['meta_description'] ?? '';
 $metaKw    = $seo['meta_keywords'] ?? '';
 $ogImage   = $seo['og_image'] ?? '';
@@ -47,312 +113,199 @@ $ogImage   = $seo['og_image'] ?? '';
   <title><?= e($pageTitle) ?></title>
   <?php if ($metaDesc): ?><meta name="description" content="<?= e($metaDesc) ?>"><?php endif; ?>
   <?php if ($metaKw): ?><meta name="keywords" content="<?= e($metaKw) ?>"><?php endif; ?>
-  <!-- Open Graph -->
   <meta property="og:title" content="<?= e($pageTitle) ?>">
   <meta property="og:description" content="<?= e($metaDesc) ?>">
   <meta property="og:type" content="website">
   <?php if ($ogImage): ?><meta property="og:image" content="<?= e($ogImage) ?>"><?php endif; ?>
-  <!-- Canonical -->
   <link rel="canonical" href="<?= e(APP_URL) ?>/">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
 <header id="header">
   <div class="container">
     <div class="header-inner">
-      <a href="/" class="logo">
-        <div class="logo-icon">🎵</div>
-        Music<span>OfEveryone</span>
+      <a href="/" class="logo" aria-label="<?= e($siteName) ?>">
+        <span class="logo-icon" aria-hidden="true">♪</span>
+        <span class="logo-text">
+          <strong>MusicOfEveryone</strong>
+          <small>MUSIC CLUB</small>
+        </span>
       </a>
-      <nav>
+
+      <nav aria-label="Điều hướng chính">
         <ul>
-          <li><a href="/" class="active">Trang Chủ</a></li>
-          <li><a href="#levels">Lộ Trình</a></li>
-          <li><a href="#courses">Khóa Học</a></li>
-          <li><a href="#features">Tính Năng</a></li>
-          <li><a href="#contact">Liên Hệ</a></li>
+          <li><a href="#hero" class="active">Trang chủ</a></li>
+          <li><a href="#courses">Khóa học</a></li>
+          <li><a href="#courses">Nhạc cụ</a></li>
+          <li><a href="#footer">Giảng viên</a></li>
+          <li><a href="#levels">Lộ trình</a></li>
+          <li><a href="#courses">Thư viện</a></li>
+          <li><a href="#features">Cộng đồng</a></li>
+          <li><a href="#footer">Về chúng tôi</a></li>
         </ul>
       </nav>
-      <a href="#courses" class="btn btn-primary nav-cta">Đăng Ký Học</a>
-      <div class="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
+
+      <div class="header-actions">
+        <a href="/admin/login.php" class="btn btn-outline-dark">Đăng nhập</a>
+        <a href="#courses" class="btn btn-primary">Đăng ký</a>
       </div>
+
+      <button class="hamburger" aria-label="Menu" type="button">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </header>
 
-<!-- ===== HERO ===== -->
 <section id="hero">
   <div class="container">
     <div class="hero-inner">
-      <div class="hero-content">
-        <div class="hero-badge">🎶 Trung Tâm Âm Nhạc Hàng Đầu</div>
-        <h1><?= nl2br(e($heroTitle)) ?></h1>
-        <p><?= e($heroSub) ?></p>
-        <div class="hero-actions">
-          <a href="<?= e($heroBtnUrl) ?>" class="btn btn-gold"><?= e($heroBtnText) ?></a>
-          <a href="#courses" class="btn btn-outline">Xem Khóa Học</a>
-        </div>
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <strong><span data-target="<?= $totalStudents ?: 500 ?>">0</span>+</strong>
-            <span>Học Viên</span>
-          </div>
-          <div class="hero-stat">
-            <strong><span data-target="<?= $totalCourses ?: 20 ?>">0</span>+</strong>
-            <span>Khóa Học</span>
-          </div>
-          <div class="hero-stat">
-            <strong><span data-target="<?= $totalTeachers ?: 15 ?>">0</span>+</strong>
-            <span>Giảng Viên</span>
-          </div>
-          <div class="hero-stat">
-            <strong><span data-target="10">0</span>+</strong>
-            <span>Năm Kinh Nghiệm</span>
-          </div>
-        </div>
+      <div class="hero-copy">
+        <h1>
+          <span>HỌC NHẠC</span>
+          <span>CHO MỌI LỨA TUỔI</span>
+        </h1>
+        <p>Từ cơ bản đến nâng cao – Lộ trình rõ ràng – Học mọi lúc, mọi nơi</p>
+        <a href="<?= e($ctaUrl) ?>" class="btn btn-primary hero-cta">Bắt đầu hành trình <span aria-hidden="true">→</span></a>
       </div>
-      <div class="hero-visual">
-        <div class="hero-card">
-          <div class="hero-card-top">
-            <div class="hero-card-icon">🎹</div>
-            <div class="hero-card-info">
-              <h4>Piano Cơ Bản</h4>
-              <p>Học viên: Nguyễn Thị Lan</p>
-            </div>
-          </div>
-          <div class="hero-card-progress"><span style="width:75%"></span></div>
-          <p style="font-size:.8rem;opacity:.7;margin-top:.5rem">Tiến độ: 75% — Tuần 9/12</p>
+
+      <div class="hero-showcase" aria-label="Bộ minh họa hero gồm 3 nhân vật và nốt nhạc trang trí">
+        <span class="hero-orb hero-orb-green" aria-hidden="true"></span>
+        <span class="hero-orb hero-orb-purple" aria-hidden="true"></span>
+        <span class="floating-note note-one" aria-hidden="true">♪</span>
+        <span class="floating-note note-two" aria-hidden="true">♫</span>
+        <span class="floating-note note-three" aria-hidden="true">♬</span>
+
+        <div class="hero-character hero-guitar" role="img" aria-label="Bé trai chơi guitar mặc áo hoodie vàng cam">
+          <span class="character-badge">Guitar</span>
+          <span class="character-caption">Bé trai • hoodie vàng cam</span>
         </div>
-        <div class="hero-card">
-          <div class="hero-card-top">
-            <div class="hero-card-icon">🎸</div>
-            <div class="hero-card-info">
-              <h4>Guitar Đệm Hát</h4>
-              <p>Học viên: Trần Văn Hùng</p>
-            </div>
-          </div>
-          <div class="hero-card-progress"><span style="width:40%"></span></div>
-          <p style="font-size:.8rem;opacity:.7;margin-top:.5rem">Tiến độ: 40% — Tuần 5/12</p>
+        <div class="hero-character hero-keyboard" role="img" aria-label="Bé gái chơi keyboard mặc áo hồng">
+          <span class="character-badge">Keyboard</span>
+          <span class="character-caption">Bé gái • áo hồng</span>
+        </div>
+        <div class="hero-character hero-laptop" role="img" aria-label="Bạn nam tóc xoăn đeo kính dùng laptop mặc áo hoodie đen">
+          <span class="character-badge">Laptop</span>
+          <span class="character-caption">Bạn nam • hoodie đen</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== LEARNING PATH / LEVELS ===== -->
 <section id="levels">
   <div class="container">
-    <h2 class="section-title">Lộ Trình <span class="text-green">Cấp Độ</span></h2>
-    <p class="section-subtitle">Chúng tôi thiết kế chương trình học rõ ràng theo từng cấp độ, phù hợp với mọi lứa tuổi và khả năng.</p>
-    <div class="levels-grid">
-      <div class="level-card green">
-        <div class="level-icon">🌱</div>
-        <h3>Cơ Bản</h3>
-        <p>Làm quen với nhạc cụ, nhạc lý cơ bản, tư thế và kỹ thuật nền tảng. Phù hợp cho người mới bắt đầu.</p>
-        <span class="level-tag">0 – 3 tháng</span>
-      </div>
-      <div class="level-card blue">
-        <div class="level-icon">📘</div>
-        <h3>Trung Cấp</h3>
-        <p>Nâng cao kỹ thuật, học các tác phẩm có độ khó trung bình, phát triển khả năng diễn đạt âm nhạc.</p>
-        <span class="level-tag">3 – 12 tháng</span>
-      </div>
-      <div class="level-card orange">
-        <div class="level-icon">🔥</div>
-        <h3>Nâng Cao</h3>
-        <p>Thành thạo các tác phẩm phức tạp, hòa tấu nhóm, biểu diễn sân khấu và thi chứng chỉ âm nhạc.</p>
-        <span class="level-tag">1 – 3 năm</span>
-      </div>
-      <div class="level-card purple">
-        <div class="level-icon">🏆</div>
-        <h3>Chuyên Nghiệp</h3>
-        <p>Đào tạo chuyên sâu cho học viên có định hướng nghề nghiệp âm nhạc, biểu diễn quốc tế.</p>
-        <span class="level-tag">3+ năm</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FEATURES ===== -->
-<section id="features" class="section-alt">
-  <div class="container">
-    <h2 class="section-title">Tại Sao Chọn <span class="text-green">MusicOfEveryone?</span></h2>
-    <p class="section-subtitle">Chúng tôi mang đến môi trường học tập tốt nhất với đội ngũ giảng viên tài năng và cơ sở vật chất hiện đại.</p>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">👨‍🏫</div>
-        <div class="feature-text">
-          <h3>Giảng Viên Chuyên Nghiệp</h3>
-          <p>100% giảng viên tốt nghiệp từ các nhạc viện hàng đầu Việt Nam và quốc tế, có nhiều năm kinh nghiệm giảng dạy thực tế.</p>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">📚</div>
-        <div class="feature-text">
-          <h3>Chương Trình Học Bài Bản</h3>
-          <p>Giáo trình được biên soạn kỹ lưỡng, kết hợp phương pháp truyền thống và hiện đại, đảm bảo học viên tiến bộ nhanh và bền vững.</p>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🏠</div>
-        <div class="feature-text">
-          <h3>Lớp Học Nhỏ & Cá Nhân Hóa</h3>
-          <p>Mỗi lớp không quá 5 học viên, đảm bảo giảng viên có thể chú ý và hướng dẫn từng cá nhân một cách tỉ mỉ nhất.</p>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎤</div>
-        <div class="feature-text">
-          <h3>Biểu Diễn Thực Tế</h3>
-          <p>Định kỳ tổ chức các buổi hòa nhạc, recital cho học viên thực hành trên sân khấu thật, xây dựng sự tự tin và kinh nghiệm biểu diễn.</p>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🕐</div>
-        <div class="feature-text">
-          <h3>Lịch Học Linh Hoạt</h3>
-          <p>Học vào buổi tối và cuối tuần, phù hợp với lịch trình bận rộn của học sinh, sinh viên và người đi làm.</p>
-        </div>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">🎵</div>
-        <div class="feature-text">
-          <h3>Đa Dạng Nhạc Cụ & Thể Loại</h3>
-          <p>Từ Piano, Guitar, Violin, Thanh nhạc đến các nhạc cụ dân tộc — chúng tôi đáp ứng mọi đam mê âm nhạc của bạn.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== NUMBERS ===== -->
-<section id="numbers">
-  <div class="container">
-    <div class="numbers-grid">
-      <div class="number-item">
-        <strong><span data-target="<?= $totalStudents ?: 500 ?>">0</span>+</strong>
-        <span>Học Viên Đã Tốt Nghiệp</span>
-      </div>
-      <div class="number-item">
-        <strong><span data-target="<?= $totalCourses ?: 20 ?>">0</span>+</strong>
-        <span>Khóa Học Đa Dạng</span>
-      </div>
-      <div class="number-item">
-        <strong><span data-target="<?= $totalTeachers ?: 15 ?>">0</span>+</strong>
-        <span>Giảng Viên Chuyên Nghiệp</span>
-      </div>
-      <div class="number-item">
-        <strong><span data-target="98">0</span>%</strong>
-        <span>Học Viên Hài Lòng</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FEATURED COURSES ===== -->
-<section id="courses" class="section-alt">
-  <div class="container">
-    <h2 class="section-title">Khóa Học <span class="text-green">Nổi Bật</span></h2>
-    <p class="section-subtitle">Khám phá những khóa học được học viên đánh giá cao nhất, giúp bạn phát triển toàn diện về âm nhạc.</p>
-
-    <?php if (empty($featuredCourses)): ?>
-      <p style="text-align:center;color:#666;">Chưa có khóa học. Vui lòng kiểm tra lại sau.</p>
-    <?php else: ?>
-    <div class="courses-grid">
-      <?php
-      $icons = ['🎹','🎸','🎤','🎻','🥁','🎺'];
-      $i = 0;
-      foreach ($featuredCourses as $course):
-        $lvl = $course['level'];
-        $badgeClass = 'badge-' . levelColor($lvl);
-        $icon = $icons[$i % count($icons)];
-        $i++;
-      ?>
-      <div class="course-card">
-        <div class="course-thumb" style="background:linear-gradient(135deg,<?= match($lvl){
-          'co_ban'=>'#0f5c35,#25a06a','trung_cap'=>'#1e3a8a,#3b82f6',
-          'nang_cao'=>'#7c2d12,#f97316','chuyen_nghiep'=>'#4c1d95,#8b5cf6',
-          default=>'#0f5c35,#25a06a'
-        } ?>)">
-          <?= $icon ?>
-          <span class="course-level-badge badge-<?= levelColor($lvl) ?>"><?= levelLabel($lvl) ?></span>
-        </div>
-        <div class="course-body">
-          <h3 class="course-title"><?= e($course['title']) ?></h3>
-          <p class="course-desc"><?= e($course['short_desc'] ?? '') ?></p>
-          <div class="course-meta">
-            <span class="course-teacher">👤 <?= e($course['teacher_name'] ?? 'Giảng viên') ?></span>
-            <span class="course-price <?= $course['price'] <= 0 ? 'free' : '' ?>"><?= formatPrice((float)$course['price']) ?></span>
+    <div class="levels-list">
+      <?php foreach ($levelBadges as $badge): ?>
+        <article class="level-pill level-<?= e($badge['accent']) ?>">
+          <span class="level-circle"><?= e($badge['level']) ?></span>
+          <div class="level-copy">
+            <strong><?= e($badge['title']) ?></strong>
+            <span><?= e($badge['age']) ?></span>
           </div>
-        </div>
-      </div>
+        </article>
       <?php endforeach; ?>
     </div>
-    <?php endif; ?>
+  </div>
+</section>
 
-    <div class="courses-cta">
-      <a href="#contact" class="btn btn-primary btn-lg">Đăng Ký Khóa Học Ngay</a>
+<section id="features">
+  <div class="container">
+    <div class="features-grid">
+      <?php foreach ($features as $feature): ?>
+        <article class="feature-card">
+          <div class="feature-icon" aria-hidden="true"><?= e($feature['icon']) ?></div>
+          <h2><?= e($feature['title']) ?></h2>
+          <p><?= e($feature['desc']) ?></p>
+        </article>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
 
-<!-- ===== CONTACT / FOOTER ===== -->
+<section id="courses">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title-inline">🎵 KHÓA HỌC NỔI BẬT</h2>
+      <a href="#footer" class="section-link">Xem tất cả khóa học <span aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="featured-courses-grid">
+      <?php foreach ($featuredCourseCards as $course): ?>
+        <article class="featured-course-card <?= e($course['class']) ?>" role="img" aria-label="<?= e($course['aria']) ?>">
+          <div class="featured-course-overlay"></div>
+          <span class="featured-course-badge"><?= e($course['badge']) ?></span>
+          <div class="featured-course-content">
+            <small><?= e($course['caption']) ?></small>
+            <h3><?= e($course['title']) ?></h3>
+            <p><?= e($course['desc']) ?></p>
+          </div>
+        </article>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
 <footer id="footer">
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="/" class="logo">
-          <div class="logo-icon">🎵</div>
-          Music<span>OfEveryone</span>
+        <a href="/" class="logo" aria-label="<?= e($siteName) ?>">
+          <span class="logo-icon" aria-hidden="true">♪</span>
+          <span class="logo-text">
+            <strong>MusicOfEveryone</strong>
+            <small>MUSIC CLUB</small>
+          </span>
         </a>
-        <p>Trung tâm âm nhạc MusicOfEveryone — nơi mọi người đều có thể khám phá và phát triển niềm đam mê âm nhạc của mình.</p>
+        <p>MusicOfEveryone mang đến lộ trình học nhạc thân thiện, rõ ràng và truyền cảm hứng cho mọi lứa tuổi.</p>
         <div class="footer-socials">
           <?php if ($facebook): ?><a href="<?= e($facebook) ?>" target="_blank" rel="noopener" title="Facebook">f</a><?php endif; ?>
           <?php if ($youtube): ?><a href="<?= e($youtube) ?>" target="_blank" rel="noopener" title="YouTube">▶</a><?php endif; ?>
-          <a href="mailto:<?= e($email) ?>" title="Email">✉</a>
+          <?php if ($email): ?><a href="mailto:<?= e($email) ?>" title="Email">✉</a><?php endif; ?>
         </div>
       </div>
+
       <div class="footer-col">
-        <h4>Khóa Học</h4>
+        <h4>Khóa học</h4>
         <ul>
+          <li><a href="#courses">Thanh nhạc</a></li>
           <li><a href="#courses">Piano</a></li>
-          <li><a href="#courses">Guitar</a></li>
           <li><a href="#courses">Violin</a></li>
-          <li><a href="#courses">Thanh Nhạc</a></li>
-          <li><a href="#courses">Nhạc Lý</a></li>
+          <li><a href="#courses">Sáo Recorder</a></li>
         </ul>
       </div>
+
       <div class="footer-col">
-        <h4>Liên Kết</h4>
+        <h4>Lộ trình</h4>
         <ul>
-          <li><a href="/">Trang Chủ</a></li>
-          <li><a href="#levels">Lộ Trình</a></li>
-          <li><a href="#features">Tính Năng</a></li>
-          <li><a href="#contact">Liên Hệ</a></li>
-          <li><a href="/admin/">Quản Trị</a></li>
+          <li><a href="#levels">Cấp 1</a></li>
+          <li><a href="#levels">Cấp 2</a></li>
+          <li><a href="#levels">Cấp 3</a></li>
+          <li><a href="/admin/">Quản trị</a></li>
         </ul>
       </div>
+
       <div class="footer-col" id="contact">
-        <h4>Liên Hệ</h4>
+        <h4>Liên hệ</h4>
         <ul class="footer-contact">
           <?php if ($address): ?><li><span>📍</span><span><?= e($address) ?></span></li><?php endif; ?>
-          <?php if ($phone): ?><li><span>📞</span><span><a href="tel:<?= e(preg_replace('/\s+/','',$phone)) ?>"><?= e($phone) ?></a></span></li><?php endif; ?>
+          <?php if ($phone): ?><li><span>📞</span><span><a href="tel:<?= e(preg_replace('/\s+/', '', $phone)) ?>"><?= e($phone) ?></a></span></li><?php endif; ?>
           <?php if ($email): ?><li><span>✉</span><span><a href="mailto:<?= e($email) ?>"><?= e($email) ?></a></span></li><?php endif; ?>
         </ul>
       </div>
     </div>
+
     <?php if ($mapEmbed): ?>
-    <div class="footer-map">
-      <h4>📍 Bản Đồ Đường Đến</h4>
-      <div class="map-embed">
-        <?= sanitizeMapEmbed($mapEmbed) ?>
+      <div class="footer-map">
+        <h4>📍 Bản đồ đường đến</h4>
+        <div class="map-embed">
+          <?= sanitizeMapEmbed($mapEmbed) ?>
+        </div>
       </div>
-    </div>
     <?php endif; ?>
+
     <div class="footer-bottom">
       <span><?= e($footerText) ?></span>
       <span><a href="/sitemap.xml">Sitemap</a> · <a href="/robots.txt">Robots.txt</a></span>

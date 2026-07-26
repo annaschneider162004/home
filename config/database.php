@@ -11,7 +11,7 @@ define('DB_PASS', 'your_db_password'); // Mật khẩu database
 define('DB_CHARSET', 'utf8mb4');
 
 // Cài đặt ứng dụng
-define('APP_URL', 'http://yourdomain.com'); // URL gốc của website (không có / cuối)
+define('APP_URL', 'https://yourdomain.com'); // URL gốc của website — dùng HTTPS sau khi cài SSL (không có / cuối)
 define('APP_NAME', 'MusicOfEveryone');
 define('APP_VERSION', '1.0.0');
 

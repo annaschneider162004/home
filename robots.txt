@@ -4,4 +4,4 @@ Disallow: /config/
 Disallow: /includes/
 Allow: /
 
-Sitemap: http://yourdomain.com/sitemap.xml
+Sitemap: https://yourdomain.com/sitemap.xml

@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Save site settings
     $settingsToSave = $_POST['settings'] ?? [];
     foreach ($settingsToSave as $key => $value) {
-        $key = preg_replace('/[^a-z0-9_]/', '', $key);
+        // Sanitize key: lowercase alphanumeric + underscore, then check whitelist
+        $key = strtolower(preg_replace('/[^a-z0-9_]/i', '', $key));
         if (!$key || !in_array($key, $allowedKeys, true)) continue;
         $exists = Database::fetchOne("SELECT id FROM site_settings WHERE setting_key = ?", [$key]);
         if ($exists) {

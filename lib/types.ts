@@ -6,7 +6,7 @@ export type SeoConfig = {
 };
 
 export type SiteData = {
-  admin: { username: string; password: string };
+  admin: { username: string; passwordSalt: string; passwordHash: string };
   settings: {
     siteName: string;
     baseUrl: string;

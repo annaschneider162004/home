@@ -40,19 +40,32 @@ export default function AdminPanel({
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [settings, setSettings] = useState<SettingsData>(initialSettings);
+  const [error, setError] = useState("");
 
   const pageSize = 5;
 
   async function loadResource(resource: ResourceKey) {
-    const res = await fetch(`/api/admin/${resource}`, { cache: "no-store" });
-    const data = (await res.json()) as ResourceItem[];
-    setRecords((prev) => ({ ...prev, [resource]: data }));
+    try {
+      setError("");
+      const res = await fetch(`/api/admin/${resource}`, { cache: "no-store" });
+      if (!res.ok) throw new Error("Không thể tải dữ liệu");
+      const data = (await res.json()) as ResourceItem[];
+      setRecords((prev) => ({ ...prev, [resource]: data }));
+    } catch {
+      setError("Không thể tải dữ liệu quản trị. Vui lòng thử lại.");
+    }
   }
 
   async function loadSettings() {
-    const res = await fetch("/api/admin/settings", { cache: "no-store" });
-    const data = (await res.json()) as SettingsData;
-    setSettings(data);
+    try {
+      setError("");
+      const res = await fetch("/api/admin/settings", { cache: "no-store" });
+      if (!res.ok) throw new Error("Không thể tải cấu hình");
+      const data = (await res.json()) as SettingsData;
+      setSettings(data);
+    } catch {
+      setError("Không thể tải cấu hình SEO/Map.");
+    }
   }
 
   const currentResource = active as ResourceKey;
@@ -62,7 +75,7 @@ export default function AdminPanel({
     }
 
     return records[currentResource].filter((item) =>
-      JSON.stringify(item).toLowerCase().includes(query.toLowerCase()),
+      Object.values(item).some((value) => value.toLowerCase().includes(query.toLowerCase())),
     );
   }, [active, currentResource, query, records]);
 
@@ -70,30 +83,43 @@ export default function AdminPanel({
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
 
   async function saveResource(resource: ResourceKey, payload: ResourceItem) {
-    const isUpdate = Boolean(payload.id);
-    const endpoint = isUpdate ? `/api/admin/${resource}/${payload.id}` : `/api/admin/${resource}`;
-
-    await fetch(endpoint, {
-      method: isUpdate ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    await loadResource(resource);
+    try {
+      const isUpdate = Boolean(payload.id);
+      const endpoint = isUpdate ? `/api/admin/${resource}/${payload.id}` : `/api/admin/${resource}`;
+      const res = await fetch(endpoint, {
+        method: isUpdate ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error("Save failed");
+      await loadResource(resource);
+    } catch {
+      setError("Lưu dữ liệu thất bại.");
+    }
   }
 
   async function deleteResource(resource: ResourceKey, id: string) {
-    await fetch(`/api/admin/${resource}/${id}`, { method: "DELETE" });
-    await loadResource(resource);
+    try {
+      const res = await fetch(`/api/admin/${resource}/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed");
+      await loadResource(resource);
+    } catch {
+      setError("Xóa dữ liệu thất bại.");
+    }
   }
 
   async function updateSettings(updated: SettingsData) {
-    await fetch("/api/admin/settings", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updated),
-    });
-    await loadSettings();
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      if (!res.ok) throw new Error("Update failed");
+      await loadSettings();
+    } catch {
+      setError("Lưu cấu hình thất bại.");
+    }
   }
 
   return (
@@ -114,8 +140,13 @@ export default function AdminPanel({
         ))}
         <button
           onClick={async () => {
-            await fetch("/api/admin/logout", { method: "POST" });
-            window.location.href = "/admin/login";
+            try {
+              const res = await fetch("/api/admin/logout", { method: "POST" });
+              if (!res.ok) throw new Error("Logout failed");
+              window.location.href = "/admin/login";
+            } catch {
+              setError("Đăng xuất thất bại. Vui lòng thử lại.");
+            }
           }}
         >
           Đăng xuất
@@ -123,6 +154,7 @@ export default function AdminPanel({
       </aside>
 
       <section className="admin-content">
+        {error && <p className="error">{error}</p>}
         {active === "dashboard" && (
           <div className="dashboard-grid">
             <article className="card"><h3>Học viên/Người dùng</h3><p>{records.users.length}</p></article>
@@ -150,7 +182,9 @@ export default function AdminPanel({
           />
         )}
 
-        {active === "settings" && <SettingsManager settings={settings} onSave={updateSettings} />}
+        {active === "settings" && (
+          <SettingsManager settings={settings} onChange={setSettings} onSave={updateSettings} />
+        )}
       </section>
     </div>
   );
@@ -247,53 +281,53 @@ function ResourceManager({
 
 function SettingsManager({
   settings,
+  onChange,
   onSave,
 }: {
   settings: SettingsData;
+  onChange: (settings: SettingsData) => void;
   onSave: (settings: SettingsData) => Promise<void>;
 }) {
-  const [form, setForm] = useState(settings);
-
   return (
     <div>
       <h2>Quản lý cấu hình SEO & Google Map</h2>
       <div className="admin-form-grid">
         <input
           placeholder="Base URL"
-          value={form.baseUrl}
-          onChange={(e) => setForm((prev) => ({ ...prev, baseUrl: e.target.value }))}
+          value={settings.baseUrl}
+          onChange={(e) => onChange({ ...settings, baseUrl: e.target.value })}
         />
         <input
           placeholder="Địa chỉ"
-          value={form.map.address}
+          value={settings.map.address}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, map: { ...prev.map, address: e.target.value } }))
+            onChange({ ...settings, map: { ...settings.map, address: e.target.value } })
           }
         />
         <input
           placeholder="Latitude"
-          value={form.map.latitude}
+          value={settings.map.latitude}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, map: { ...prev.map, latitude: e.target.value } }))
+            onChange({ ...settings, map: { ...settings.map, latitude: e.target.value } })
           }
         />
         <input
           placeholder="Longitude"
-          value={form.map.longitude}
+          value={settings.map.longitude}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, map: { ...prev.map, longitude: e.target.value } }))
+            onChange({ ...settings, map: { ...settings.map, longitude: e.target.value } })
           }
         />
         <textarea
           placeholder="Google Maps iframe"
-          value={form.map.embedIframe}
+          value={settings.map.embedIframe}
           onChange={(e) =>
-            setForm((prev) => ({ ...prev, map: { ...prev.map, embedIframe: e.target.value } }))
+            onChange({ ...settings, map: { ...settings.map, embedIframe: e.target.value } })
           }
         />
       </div>
 
-      {Object.entries(form.seo).map(([key, value]) => (
+      {Object.entries(settings.seo).map(([key, value]) => (
         <div key={key} className="seo-block">
           <h3>SEO - {key}</h3>
           <div className="admin-form-grid">
@@ -301,47 +335,47 @@ function SettingsManager({
               placeholder="Title"
               value={value.title}
               onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  seo: { ...prev.seo, [key]: { ...prev.seo[key], title: e.target.value } },
-                }))
+                onChange({
+                  ...settings,
+                  seo: { ...settings.seo, [key]: { ...settings.seo[key], title: e.target.value } },
+                })
               }
             />
             <input
               placeholder="Description"
               value={value.description}
               onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  seo: { ...prev.seo, [key]: { ...prev.seo[key], description: e.target.value } },
-                }))
+                onChange({
+                  ...settings,
+                  seo: { ...settings.seo, [key]: { ...settings.seo[key], description: e.target.value } },
+                })
               }
             />
             <input
               placeholder="Keywords"
               value={value.keywords}
               onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  seo: { ...prev.seo, [key]: { ...prev.seo[key], keywords: e.target.value } },
-                }))
+                onChange({
+                  ...settings,
+                  seo: { ...settings.seo, [key]: { ...settings.seo[key], keywords: e.target.value } },
+                })
               }
             />
             <input
               placeholder="OG Image"
               value={value.ogImage}
               onChange={(e) =>
-                setForm((prev) => ({
-                  ...prev,
-                  seo: { ...prev.seo, [key]: { ...prev.seo[key], ogImage: e.target.value } },
-                }))
+                onChange({
+                  ...settings,
+                  seo: { ...settings.seo, [key]: { ...settings.seo[key], ogImage: e.target.value } },
+                })
               }
             />
           </div>
         </div>
       ))}
 
-      <button className="btn btn-solid" onClick={() => onSave(form)}>
+      <button className="btn btn-solid" onClick={() => onSave(settings)}>
         Lưu cấu hình
       </button>
     </div>

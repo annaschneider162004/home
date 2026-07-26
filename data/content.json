@@ -1,7 +1,8 @@
 {
   "admin": {
     "username": "admin",
-    "password": "admin123"
+    "passwordSalt": "1ba9ef2c5d201c8bb884b5c6db9def28",
+    "passwordHash": "fc08acf7ef48f9651252c75c276680d25bf18010e55083d6909969da2588ffb9e7a14ad0ea29d3865f6bcef3ddb83f5a8f99026b434a432f3e3f0b4bafd73230"
   },
   "settings": {
     "siteName": "MusicOfEveryone - Music Club",

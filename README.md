@@ -14,6 +14,12 @@ npm run dev
 ```
 Mở trình duyệt tại: `http://localhost:3000`
 
+Tùy chọn bảo mật phiên admin khi deploy:
+```bash
+ADMIN_SESSION_SECRET=your-long-random-secret
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
+
 ## Đăng nhập admin
 - URL: `http://localhost:3000/admin/login`
 - Tài khoản mặc định: `admin`

@@ -5,9 +5,10 @@ export async function getSeoMetadata(pageKey: string): Promise<Metadata> {
   const data = await readData();
   const seo = data.settings.seo[pageKey] ?? data.settings.seo.home;
   const siteName = data.settings.siteName;
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? data.settings.baseUrl;
   const imageUrl = seo.ogImage.startsWith("http")
     ? seo.ogImage
-    : `${data.settings.baseUrl}${seo.ogImage}`;
+    : `${baseUrl}${seo.ogImage}`;
 
   return {
     title: seo.title,

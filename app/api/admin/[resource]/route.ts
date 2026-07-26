@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createId, isResourceKey, readData, writeData } from "@/lib/data";
 import { isAdminAuthenticated } from "@/lib/auth";
+import { sanitizeResourcePayload } from "@/lib/validation";
 
 export async function GET(
   _request: Request,
@@ -32,9 +33,13 @@ export async function POST(
     return NextResponse.json({ message: "Invalid resource" }, { status: 400 });
   }
 
-  const payload = (await request.json()) as Record<string, string>;
+  const payload = (await request.json()) as Record<string, unknown>;
+  const sanitized = sanitizeResourcePayload(resource, payload);
+  if (!sanitized) {
+    return NextResponse.json({ message: "Invalid payload" }, { status: 400 });
+  }
   const data = await readData();
-  const newItem = { ...payload, id: createId(resource.slice(0, 1)) };
+  const newItem = { ...sanitized, id: createId(resource.slice(0, 1)) };
 
   data[resource].push(newItem as never);
   await writeData(data);

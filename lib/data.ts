@@ -29,7 +29,27 @@ export function mapEmbedSrc(data: SiteData): string {
   if (iframe) {
     const srcMatch = iframe.match(/src=["']([^"']+)["']/i);
     if (srcMatch?.[1]) {
-      return srcMatch[1];
+      try {
+        const parsed = new URL(srcMatch[1]);
+        const allowedHosts = new Set([
+          "google.com",
+          "www.google.com",
+          "maps.google.com",
+          "www.google.com.vn",
+          "maps.google.com.vn",
+        ]);
+        if (
+          parsed.protocol === "https:" &&
+          allowedHosts.has(parsed.hostname) &&
+          parsed.pathname.startsWith("/maps")
+        ) {
+          return parsed.toString();
+        }
+      } catch {
+        if (process.env.NODE_ENV !== "production") {
+          console.warn("Invalid Google Maps iframe URL.");
+        }
+      }
     }
   }
 

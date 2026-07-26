@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { readData, writeData } from "@/lib/data";
-import type { SiteData } from "@/lib/types";
+import { validateSettingsPayload } from "@/lib/validation";
 
 export async function GET() {
   if (!(await isAdminAuthenticated())) {
@@ -21,7 +21,10 @@ export async function PUT(request: Request) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  const payload = (await request.json()) as SiteData["settings"];
+  const payload = validateSettingsPayload(await request.json());
+  if (!payload) {
+    return NextResponse.json({ message: "Invalid payload" }, { status: 400 });
+  }
   const data = await readData();
   data.settings.baseUrl = payload.baseUrl;
   data.settings.map = payload.map;

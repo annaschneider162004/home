@@ -24,7 +24,12 @@ export default async function CoursesPage() {
               <Image src={course.image} alt={course.name} width={160} height={160} />
               <h3>{course.name}</h3>
               <p>{course.description}</p>
-              <p>Học phí: {Number(course.price).toLocaleString("vi-VN")}đ</p>
+              <p>
+                Học phí:{" "}
+                {Number.isFinite(Number(course.price))
+                  ? `${Number(course.price).toLocaleString("vi-VN")}đ`
+                  : "Liên hệ"}
+              </p>
               <span className="badge">{course.level}</span>
             </article>
           ))}

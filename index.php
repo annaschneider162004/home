@@ -6,7 +6,7 @@
 require_once __DIR__ . '/includes/functions.php';
 
 $seo = getSeo('home');
-$siteName   = getSetting('site_name', 'MusicOfEveryone');
+$siteName    = getSetting('site_name', 'MusicOfEveryone');
 $mapEmbed   = getSetting('google_map_embed', '');
 $address    = getSetting('site_address', '');
 $phone      = getSetting('site_phone', '');
@@ -138,12 +138,12 @@ $ogImage   = $seo['og_image'] ?? '';
         <ul>
           <li><a href="#hero" class="active">Trang chủ</a></li>
           <li><a href="#courses">Khóa học</a></li>
-          <li><a href="#courses">Nhạc cụ</a></li>
-          <li><a href="#footer">Giảng viên</a></li>
+          <li><a href="#instruments">Nhạc cụ</a></li>
+          <li><a href="#teachers">Giảng viên</a></li>
           <li><a href="#levels">Lộ trình</a></li>
-          <li><a href="#courses">Thư viện</a></li>
-          <li><a href="#features">Cộng đồng</a></li>
-          <li><a href="#footer">Về chúng tôi</a></li>
+          <li><a href="#library">Thư viện</a></li>
+          <li><a href="#community">Cộng đồng</a></li>
+          <li><a href="#about">Về chúng tôi</a></li>
         </ul>
       </nav>
 
@@ -213,6 +213,7 @@ $ogImage   = $seo['og_image'] ?? '';
 
 <section id="features">
   <div class="container">
+    <span id="community" class="anchor-target" aria-hidden="true"></span>
     <div class="features-grid">
       <?php foreach ($features as $feature): ?>
         <article class="feature-card">
@@ -227,6 +228,8 @@ $ogImage   = $seo['og_image'] ?? '';
 
 <section id="courses">
   <div class="container">
+    <span id="instruments" class="anchor-target" aria-hidden="true"></span>
+    <span id="library" class="anchor-target" aria-hidden="true"></span>
     <div class="section-head">
       <h2 class="section-title-inline">🎵 KHÓA HỌC NỔI BẬT</h2>
       <a href="#footer" class="section-link">Xem tất cả khóa học <span aria-hidden="true">→</span></a>
@@ -251,7 +254,7 @@ $ogImage   = $seo['og_image'] ?? '';
 <footer id="footer">
   <div class="container">
     <div class="footer-top">
-      <div class="footer-brand">
+      <div class="footer-brand" id="about">
         <a href="/" class="logo" aria-label="<?= e($siteName) ?>">
           <span class="logo-icon" aria-hidden="true">♪</span>
           <span class="logo-text">
@@ -277,7 +280,7 @@ $ogImage   = $seo['og_image'] ?? '';
         </ul>
       </div>
 
-      <div class="footer-col">
+      <div class="footer-col" id="teachers">
         <h4>Lộ trình</h4>
         <ul>
           <li><a href="#levels">Cấp 1</a></li>
@@ -291,7 +294,14 @@ $ogImage   = $seo['og_image'] ?? '';
         <h4>Liên hệ</h4>
         <ul class="footer-contact">
           <?php if ($address): ?><li><span>📍</span><span><?= e($address) ?></span></li><?php endif; ?>
-          <?php if ($phone): ?><li><span>📞</span><span><a href="tel:<?= e(preg_replace('/\s+/', '', $phone)) ?>"><?= e($phone) ?></a></span></li><?php endif; ?>
+          <?php if ($phone): ?>
+            <li>
+              <span>📞</span>
+              <span>
+                <a href="tel:<?= e(preg_replace('/\s+/', '', $phone)) ?>"><?= e($phone) ?></a>
+              </span>
+            </li>
+          <?php endif; ?>
           <?php if ($email): ?><li><span>✉</span><span><a href="mailto:<?= e($email) ?>"><?= e($email) ?></a></span></li><?php endif; ?>
         </ul>
       </div>

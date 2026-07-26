@@ -50,6 +50,7 @@ button { font: inherit; }
 }
 
 section { padding: 88px 0; }
+.anchor-target { display: block; position: relative; top: -108px; visibility: hidden; }
 
 .btn {
   display: inline-flex;
@@ -786,7 +787,7 @@ nav a.active::after { width: 100%; }
   .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .header-inner {
     min-height: 84px;
     flex-wrap: nowrap;
@@ -856,8 +857,8 @@ nav a.active::after { width: 100%; }
   .floating-note { font-size: 1.6rem; }
   .hero-character {
     position: absolute;
-    left: 50% !important;
-    right: auto !important;
+    left: 50%;
+    right: auto;
     transform: translateX(-50%);
     width: min(220px, 82vw);
   }

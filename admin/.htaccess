@@ -1,0 +1,7 @@
+Options -Indexes
+
+# Block direct access to PHP files that shouldn't be accessed directly
+<FilesMatch "^(bootstrap|auth|layout)\.php$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>

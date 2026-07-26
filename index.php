@@ -179,7 +179,7 @@ $ogImage   = $seo['og_image'] ?? '';
         <a href="#courses" class="btn btn-primary">Đăng ký</a>
       </div>
 
-      <button class="hamburger" aria-label="Mở menu điều hướng" aria-controls="primary-nav" aria-expanded="false" type="button">
+      <button class="hamburger" aria-label="Mở menu điều hướng" aria-controls="primary-nav" type="button">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -195,7 +195,7 @@ $ogImage   = $seo['og_image'] ?? '';
           <span>CHO MỌI LỨA TUỔI</span>
         </h1>
         <p>Từ cơ bản đến nâng cao – Lộ trình rõ ràng – Học mọi lúc, mọi nơi</p>
-        <a href="<?= e($ctaUrl) ?>" class="btn btn-primary hero-cta">Bắt đầu hành trình <span aria-hidden="true">→</span><span class="sr-only">Mở danh sách khóa học nổi bật</span></a>
+        <a href="<?= e($ctaUrl) ?>" class="btn btn-primary hero-cta">Bắt đầu hành trình <span aria-hidden="true">→</span></a>
       </div>
 
       <div class="hero-showcase">

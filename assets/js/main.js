@@ -15,6 +15,7 @@
   const hamburger = document.querySelector('.hamburger');
   const nav = document.querySelector('#header nav');
   if (hamburger && nav) {
+    hamburger.setAttribute('aria-expanded', 'false');
     hamburger.addEventListener('click', () => {
       const isOpen = nav.classList.toggle('open');
       hamburger.classList.toggle('active', isOpen);

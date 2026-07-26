@@ -349,7 +349,7 @@ $ogImage   = $seo['og_image'] ?? '';
     <div class="footer-map">
       <h4>📍 Bản Đồ Đường Đến</h4>
       <div class="map-embed">
-        <?= $mapEmbed /* already sanitized in admin — trusted HTML */ ?>
+        <?= sanitizeMapEmbed($mapEmbed) ?>
       </div>
     </div>
     <?php endif; ?>

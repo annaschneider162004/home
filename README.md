@@ -132,7 +132,7 @@ public_html/
 |---|---|
 | URL Admin | `https://yourdomain.com/admin/` |
 | Username | `admin` |
-| Password | `password` |
+| Password | `Admin@2024` |
 
 > ⚠️ **BẮT BUỘC**: Đổi mật khẩu ngay sau khi đăng nhập lần đầu!
 > 

@@ -171,8 +171,23 @@ function formatPrice(float $price): string {
 }
 
 // -------------------------------------------------------
-// Sitemap generation
+// Sanitize Google Map embed (only allow Google Maps iframes)
 // -------------------------------------------------------
+function sanitizeMapEmbed(string $html): string {
+    if ($html === '') return '';
+    // Only allow a single <iframe> from Google Maps domains
+    if (!preg_match('/<iframe\s[^>]*src=["\']https:\/\/(www\.google\.com\/maps\/|maps\.google\.com\/)[^"\']*["\'][^>]*><\/iframe>/i', $html)) {
+        return ''; // Not a trusted Google Maps iframe — discard
+    }
+    // Strip everything except the iframe tag itself
+    $clean = preg_replace('/<(?!iframe\s)[^>]+>/i', '', $html);
+    // Remove event handlers and javascript: in remaining content
+    $clean = preg_replace('/\s+on\w+\s*=\s*["\'][^"\']*["\']/i', '', $clean ?? '');
+    $clean = preg_replace('/javascript\s*:/i', '', $clean ?? '');
+    return $clean ?? '';
+}
+
+
 function generateSitemap(): void {
     $baseUrl = rtrim(getSetting('app_url', APP_URL), '/');
     $courses = Database::fetchAll("SELECT slug, updated_at FROM courses WHERE status='active' ORDER BY id");

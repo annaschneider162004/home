@@ -27,11 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect(ADMIN_URL . '/settings.php?tab=password');
     }
 
+    // Allowed settings keys per group (whitelist)
+    $allowedKeys = [
+        'site_name','site_slogan','footer_text',
+        'hero_title','hero_subtitle','hero_btn_text','hero_btn_url',
+        'site_address','site_phone','site_email','google_map_embed',
+        'facebook_url','youtube_url',
+    ];
+
     // Save site settings
     $settingsToSave = $_POST['settings'] ?? [];
     foreach ($settingsToSave as $key => $value) {
         $key = preg_replace('/[^a-z0-9_]/', '', $key);
-        if (!$key) continue;
+        if (!$key || !in_array($key, $allowedKeys, true)) continue;
         $exists = Database::fetchOne("SELECT id FROM site_settings WHERE setting_key = ?", [$key]);
         if ($exists) {
             Database::update('site_settings', ['setting_value' => trim($value)], 'setting_key = :k', ['k' => $key]);
@@ -152,7 +160,7 @@ adminHead('Cài Đặt Website');
       <div class="form-group">
         <label class="form-label">Xem Trước Bản Đồ</label>
         <div style="border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden">
-          <?= $settings['google_map_embed'] ?>
+          <?= sanitizeMapEmbed($settings['google_map_embed']) ?>
         </div>
       </div>
       <?php endif; ?>

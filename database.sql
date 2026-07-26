@@ -23,8 +23,9 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Default admin: username=admin, ******
+-- Mật khẩu mặc định: Admin@2024  (BẮT BUỘC đổi ngay sau khi deploy!)
 INSERT INTO `users` (`username`, `email`, `password`, `full_name`, `role`) VALUES
-('admin', 'admin@musicofeveryone.vn', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Quản Trị Viên', 'admin');
+('admin', 'admin@musicofeveryone.vn', '$2y$10$FzQaV3WdmT7IQnP97b/aF.xZEF/p9ZU6I3Lr.Ds4z4ES1ZUhCZnIC', 'Quản Trị Viên', 'admin');
 
 -- ============================================================
 -- Table: teachers (Giảng viên)

@@ -19,8 +19,9 @@ class Database {
             try {
                 self::$instance = new PDO($dsn, DB_USER, DB_PASS, $options);
             } catch (PDOException $e) {
-                // Hiển thị thông báo lỗi thân thiện thay vì lộ thông tin DB
-                die('<div style="font-family:sans-serif;padding:2rem;background:#fee;border:1px solid #f00;margin:1rem;border-radius:8px;"><h2>Lỗi kết nối cơ sở dữ liệu</h2><p>Vui lòng kiểm tra file <code>config/database.php</code> và đảm bảo thông tin MySQL chính xác.</p><p style="color:#999;font-size:0.85em;">Chi tiết: ' . htmlspecialchars($e->getMessage()) . '</p></div>');
+                // Log detailed error server-side, show generic message to users
+                error_log('[MusicOfEveryone] DB connection error: ' . $e->getMessage());
+                die('<div style="font-family:sans-serif;padding:2rem;background:#fee;border:1px solid #f00;margin:1rem;border-radius:8px;"><h2>Lỗi kết nối cơ sở dữ liệu</h2><p>Không thể kết nối đến cơ sở dữ liệu. Vui lòng kiểm tra file <code>config/database.php</code> và đảm bảo thông tin MySQL chính xác.</p></div>');
             }
         }
         return self::$instance;

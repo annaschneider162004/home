@@ -1,0 +1,53 @@
+Options -Indexes
+ServerSignature Off
+
+# --- PHP version (uncomment if needed on cPanel) ---
+# AddType application/x-httpd-php81 .php
+
+# --- Compression ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json
+</IfModule>
+
+# --- Cache static assets ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# --- Security headers ---
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# --- Protect sensitive files ---
+<FilesMatch "(^\.htaccess|\.htpasswd|database\.php|\.env|composer\.json|composer\.lock)$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# --- Prevent access to config and includes directories ---
+RewriteEngine On
+RewriteRule ^config(/.*)?$ - [F,L]
+RewriteRule ^includes(/.*)?$ - [F,L]
+
+# --- Pretty URLs (optional, for future use) ---
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)$ index.php?path=$1 [L,QSA]
+
+# --- Redirect /sitemap to sitemap.xml ---
+RewriteRule ^sitemap$ /sitemap.xml [R=301,L]
+
+# --- Force HTTPS (uncomment when SSL is installed) ---
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
